@@ -30,23 +30,27 @@ This script is a helper for the Export BOM script. When parts are pasted using "
 This script provides a manual way to edit attributes in a Fusion assembly. Attributes are hidden group/name/value sets used in Fusion assemblies. The script allows users to undo changes made by other scripts or add custom attributes for other purposes.
 
 ## Installation
-To install the scripts, copy the contents of the `src/` directory to the following locations:
 
 > [!NOTE]
 > I am only familiar with Windows. If anyone else knows the correct way to do this on macOS or Linux, please update and submit a PR.
 
-- **Windows:** `C:\Users\<username>\AppData\Roaming\Autodesk\Autodesk Fusion 360\API\Scripts\`
-- **macOS:** `~/Library/Application Support/Autodesk/Autodesk Fusion 360/API/Scripts/`
-  - **Note:** If Fusion 360 was installed via the Mac App Store, the path may be:
+To install the scripts
+
+1. Copy the contents of the `src/` directory to the following locations:
+   1. **Windows:** `C:\Users\<username>\AppData\Roaming\Autodesk\Autodesk Fusion 360\API\Scripts\`
+   1. **macOS:** `~/Library/Application Support/Autodesk/Autodesk Fusion 360/API/Scripts/`
+      1. **Note:** If Fusion 360 was installed via the Mac App Store, the path may be:
     `~/Library/Containers/com.autodesk.mas.fusion360/Data/Library/Application Support/Autodesk/Autodesk Fusion 360/API/Scripts/`
-- **Linux:** Autodesk Fusion 360 does not officially support Linux. However, if running through Wine, the installation path depends on the Wine configuration.
+   1. **Linux:** Autodesk Fusion 360 does not officially support Linux. However, if running through Wine, the installation path depends on the Wine configuration.
+1. In each of the folders, rename `.env.sample` to `.env`.
+1. Update the paths in the `.env` files.
 
 ### Additional Steps
-1. **Accessing the Scripts and Add-Ins Manager:**
-   - Launch Fusion 360.
-   - Navigate to the "Tools" tab.
-   - Click on "Scripts and Add-Ins."
 
-2. **Running a Script:**
-   - In the "Scripts" tab, locate the script you want to run.
-   - Select it and click "Run."
+1. **Accessing the Scripts and Add-Ins Manager:**
+   1. Launch Fusion 360.
+   1. Navigate to the "Tools" tab.
+   1. Click on "Scripts and Add-Ins."
+1. **Running a Script:**
+   1. In the "Scripts" tab, locate the script you want to run.
+   1. Select it and click "Run."
