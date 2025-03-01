@@ -1,0 +1,10 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"script",
+	"author":	"tallman#9584 on Discord",
+	"description":	{
+		"":	"Adds ignore=True attribute to a component or assembly. Used to exclude items from the automated BOM generation."
+	},
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}

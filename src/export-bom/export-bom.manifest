@@ -1,0 +1,10 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"script",
+	"author":	"Joseph McGurkin",
+	"description":	{
+		"":	"This script creates a BOM from the active component. If no component is active, the root component is used. Output is a CSV file."
+	},
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}

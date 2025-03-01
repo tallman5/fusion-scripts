@@ -1,0 +1,10 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"script",
+	"author":	"Joseph McGurkin",
+	"description":	{
+		"":	"Parts pasted using \"Past New\" end up with a (index) at the end of the name. This script finds the indexed ones and updates the part numbers. After which accurate BOM counts can be generated."
+	},
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}
