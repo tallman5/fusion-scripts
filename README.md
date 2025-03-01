@@ -32,7 +32,8 @@ This script provides a manual way to edit attributes in a Fusion assembly. Attri
 ## Installation
 To install the scripts, copy the contents of the `src/` directory to the following locations:
 
-**Note:** I am only familiar with Windows. If anyone else knows the correct way to do this on macOS or Linux, please update and submit a PR.
+> [!NOTE]
+> I am only familiar with Windows. If anyone else knows the correct way to do this on macOS or Linux, please update and submit a PR.
 
 - **Windows:** `C:\Users\<username>\AppData\Roaming\Autodesk\Autodesk Fusion 360\API\Scripts\`
 - **macOS:** `~/Library/Application Support/Autodesk/Autodesk Fusion 360/API/Scripts/`
@@ -49,22 +50,3 @@ To install the scripts, copy the contents of the `src/` directory to the followi
 2. **Running a Script:**
    - In the "Scripts" tab, locate the script you want to run.
    - Select it and click "Run."
-
-For more information, refer to Autodesk's official documentation: [help.autodesk.com](https://help.autodesk.com/view/fusion360/ENU/)
-
-## Testing GitHub Formatting
-
-> [!NOTE]
-> Useful information that users should know, even when skimming content.
-
-> [!TIP]
-> Helpful advice for doing things better or more easily.
-
-> [!IMPORTANT]
-> Key information users need to know to achieve their goal.
-
-> [!WARNING]
-> Urgent info that needs immediate user attention to avoid problems.
-
-> [!CAUTION]
-> Advises about risks or negative outcomes of certain actions.
