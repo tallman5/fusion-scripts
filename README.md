@@ -30,6 +30,9 @@ This script generates a BOM from the root component. The output is a markdown fi
 
 ### [update-partnumbers](src/update-partnumbers/update-partnumbers.py)
 
+> [!WARNING]
+This one may or may not work any more. After a Fusion update, it appears copy/paste does not result in components with the index in parenthesis.
+
 This script is a helper for the Export BOM script. When parts are pasted using "Paste New" in Fusion, they receive a name with an appended index (e.g., `Component (1)`). This causes the BOM to treat them as separate items. This script finds such indexed parts and assigns a common non-indexed name to the part number attribute, ensuring that identical parts are grouped together in the BOM with a proper quantity count.
 
 ### [attribute-editor](src/attribute-editor/attribute-editor.py)
@@ -40,7 +43,8 @@ This script provides a manual way to edit attributes in a Fusion assembly. Attri
 
 To install the scripts, copy the contents of the `src/` directory to the following locations:
 
-**Note:** I am only familiar with Windows. If anyone else knows the correct way to do this on macOS or Linux, please update and submit a PR.
+> [!NOTE]
+> I am only familiar with Windows. If anyone else knows the correct way to do this on macOS or Linux, please update and submit a PR.
 
 - **Windows:** `C:\Users\<username>\AppData\Roaming\Autodesk\Autodesk Fusion 360\API\Scripts\`
 - **macOS:** `~/Library/Application Support/Autodesk/Autodesk Fusion 360/API/Scripts/`
