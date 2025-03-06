@@ -1,4 +1,4 @@
-#Author: Joseph McGurkin
+#Author: tallman5
 #Description: Edits the attributes of the selected component
 
 import adsk.core, adsk.fusion, traceback
