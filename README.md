@@ -71,7 +71,7 @@ For more information, refer to Autodesk's official documentation: [help.autodesk
 
 Below are three sample Bill of Materials (BOMs) generated using the `export-bom` script. These examples demonstrate different use cases and formats that can be generated.
 
-1. **[4 Cabinet Counter](sample-boms/4-cabinet-counter/4-cabinet-counter-bom.md):** A simple set of utility drawers and counter for a hobby shop.
+1. **[4 Cabinet Counter](sample-boms/4-cabinet-counter/4-cabinet-counter-bom.md):** A simple set of utility drawers and counter for a hobby shop. The full project for these can be found at [/tallman5/diy-utility-drawers](https://github.com/tallman5/diy-utility-drawers).
 1. **[Voron v2.4 R2](sample-boms/voron-2.4-r2/voron-2.4r2-bom.md):** A CoreXY 3D printer
 1. **[RatRig V-Core 200 v3.1](sample-boms/rr-200-v3.1/rr-v-core-200-v3.1.md):** A CoreXY 3D printer
 
