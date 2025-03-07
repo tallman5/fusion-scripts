@@ -1,0 +1,10 @@
+{
+	"autodeskProduct":	"Fusion360",
+	"type":	"script",
+	"author":	"tallman5",
+	"description":	{
+		"":	"This script adds an attribute, boundingBox = true to an assmbly. It's a helper function for the Export BOM script."
+	},
+	"supportedOS":	"windows|mac",
+	"editEnabled":	true
+}

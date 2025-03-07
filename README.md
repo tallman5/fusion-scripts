@@ -6,6 +6,22 @@ This repository provides a collection of utilities and add-in scripts designed t
 
 The following scripts are designed to create a more accurate bill of materials (BOM).
 
+### [export-bom](src/export-bom/export-bom.py)
+
+This script generates a BOM from the root component.
+The output is a markdown file containing the BOM, with images stored in an `images` folder.
+
+### [add-bb-attribute](src/add-bb-attribute/add-bb-attribute.py)
+
+This script is a helper for the Export BOM script.
+When this attribute is set to true, the component is exported with its dimensions automatically, based on the physical bounding box.
+Handy for say wood parts!
+It adds an attribute to the selected component with the following parameters:
+
+- **groupName:** `exportBom`
+- **name:** `boundingBox`
+- **value:** `True`
+
 ### [add-ignore-attribute](src/add-ignore-attribute/add-ignore-attribute.py)
 
 This script is a helper for the Export BOM script. It ensures that assemblies with the ignore attribute set to `true` will not be exported as part of the BOM. It adds an attribute to the selected component with the following parameters:
@@ -23,10 +39,6 @@ It adds an attribute to the selected component with the following parameters:
 - **groupName:** `exportBom`
 - **name:** `isSingleAssembly`
 - **value:** `True`
-
-### [export-bom](src/export-bom/export-bom.py)
-
-This script generates a BOM from the root component. The output is a markdown file containing the BOM, with images stored in an `images` folder.
 
 ### [update-partnumbers](src/update-partnumbers/update-partnumbers.py)
 
@@ -73,6 +85,7 @@ Below are three sample Bill of Materials (BOMs) generated using the `export-bom`
 
 1. **[4 Cabinet Counter](sample-boms/4-cabinet-counter/4-cabinet-counter-bom.md):** A simple set of utility drawers and counter for a hobby shop. The full project for these can be found at [/tallman5/diy-utility-drawers](https://github.com/tallman5/diy-utility-drawers).
 1. **[Voron v2.4 R2](sample-boms/voron-2.4-r2/voron-2.4r2-bom.md):** A CoreXY 3D printer
+1. **[Others](sample-boms/):** Some other BOMs from existing projects.
 
 Each sample BOM includes images and part details to illustrate the output format and help users understand how the script structures data.
 
