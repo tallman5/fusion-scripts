@@ -15,15 +15,29 @@
 #      If there's something in the assembly which shouldn't be in the BOM
 #      Use the attribute-editor.py script to tag any assembly or component as single.
 
-import adsk.core, adsk.fusion, traceback, urllib, re
+import adsk.core, adsk.fusion, traceback, re, fractions
 
 def createSafeFilename(inputString):
     # Define the characters to be replaced with a dash
     invalidChars = r'[\\/:*?"<>|\s]'
-    # Replace invalid characters with dash
-    safeString = (re.sub(invalidChars, '-', inputString)).lower()
+    # Replace invalid characters with a dash
+    safeString = re.sub(invalidChars, '-', inputString).lower()
+    # Replace multiple dashes with a single dash
+    safeString = re.sub(r'-+', '-', safeString)
     # Ensure the file name is not empty
     return safeString if safeString else "default_filename"
+
+def decimal_to_fraction(value):
+    if value < 0.01:
+        return "0"
+    whole = int(value)
+    frac = fractions.Fraction(value - whole).limit_denominator(32)
+    if whole == 0:
+        return f"{frac.numerator}/{frac.denominator}"
+    elif frac.numerator == 0:
+        return f"{whole}"
+    else:
+        return f"{whole} {frac.numerator}/{frac.denominator}"
     
 def toggleChildren(occ, newValue, recursive):
     occ.isLightBulbOn = newValue
@@ -34,19 +48,20 @@ def toggleChildren(occ, newValue, recursive):
         for child in occ.childOccurrences:
             toggleChildren(child, newValue, recursive)
 
-def processOccs(occs, dialog, bom, viewPort, imagesFolder):
+def processOccs(occs, dialog, bom, viewPort, imagesFolder, unitMgr):
     if dialog.wasCancelled:
         return
     for occ in occs:
-        processOcc(occ, dialog, bom, viewPort, imagesFolder)
+        processOcc(occ, dialog, bom, viewPort, imagesFolder, unitMgr)
 
-def processOcc(occ, dialog, bom, viewPort, imagesFolder):
+def processOcc(occ, dialog, bom, viewPort, imagesFolder, unitMgr):
     if dialog.wasCancelled:
         return
     
     inBom = False
     ignorePart = False
     isSingleAssembly = False
+    hasDimensions = False
     partNumber = occ.component.partNumber
 
     for attr in occ.component.attributes:
@@ -55,6 +70,8 @@ def processOcc(occ, dialog, bom, viewPort, imagesFolder):
                 isSingleAssembly = True
             if attr.name == 'ignore' and attr.value == 'True':
                 ignorePart = True
+            if attr.name == 'boundingBox' and attr.value == 'True':
+                hasDimensions = True
 
     if not ignorePart:
         if isSingleAssembly or occ.component.bRepBodies.count > 0:
@@ -67,25 +84,38 @@ def processOcc(occ, dialog, bom, viewPort, imagesFolder):
             if not inBom:
                 toggleChildren(occ, True, isSingleAssembly)
 
+                dimensions = ''
+                if hasDimensions:
+                    orientedBox = occ.orientedMinimumBoundingBox
+                    dims = sorted([abs(orientedBox.width), abs(orientedBox.height), abs(orientedBox.length)], reverse=True)
+                    length, width, depth = dims[0], dims[1], dims[2]
+
+                    length = unitMgr.convert(length, "cm", unitMgr.defaultLengthUnits)
+                    width = unitMgr.convert(width, "cm", unitMgr.defaultLengthUnits)
+                    depth = unitMgr.convert(depth, "cm", unitMgr.defaultLengthUnits)
+
+                    dimensions = f"{decimal_to_fraction(length)}\" x {decimal_to_fraction(width)}\" x {decimal_to_fraction(depth)}\""
+
                 viewPort.fit()
                 imageFileName = f"{createSafeFilename(partNumber)}.png"
-                # imagePath = urllib.parse.quote("images/" + imageFileName)
-                filePath = f"{imagesFolder}{imageFileName}"   # "{}{}.png".format(imagesFolder, partNumber)
-                viewPort.saveAsImageFile(filePath, 100, 100)
+                localFilePath = f"{imagesFolder}{imageFileName}"
+                viewPort.saveAsImageFile(localFilePath, 150, 100)
+                relativeFilePath = f"images/{imageFileName}"
                 bom.append({
-                    'imagePath': filePath,
+                    'imagePath': relativeFilePath,
                     'partName': occ.name,
                     'partNumber': partNumber,
                     'instances': 1,
                     'material': '',
                     'description': occ.component.description,
+                    'dimensions': dimensions
                 })
 
             toggleChildren(occ, False, True)
 
     if isSingleAssembly == False:
         occ.isLightBulbOn = True
-        processOccs(occ.childOccurrences, dialog, bom, viewPort, imagesFolder)
+        processOccs(occ.childOccurrences, dialog, bom, viewPort, imagesFolder, unitMgr)
 
     dialog.progressValue = dialog.progressValue + 1
 
@@ -101,6 +131,8 @@ def run(context):
         if not design:
             ui.messageBox('No active Fusion design', 'No Design')
             return
+        
+        unitMgr = design.unitsManager
         rc = design.rootComponent
         allOccs = rc.allOccurrences
         rcOccs = rc.occurrences
@@ -146,7 +178,7 @@ def run(context):
 
         if userCancelled == False:
             occDialog.show('Step 2 of 3: Exporting images...', '%p percent complete, component %v of %m', 0, allOccs.count, 1)
-            processOccs(rcOccs, occDialog, bomList, viewPort, imagesFolder)
+            processOccs(rcOccs, occDialog, bomList, viewPort, imagesFolder, unitMgr)
 
         # Get root image for BOM
         sels = ui.activeSelections
@@ -157,18 +189,24 @@ def run(context):
         sels.clear()
         viewPort.fit()
         startImagePath = imagesFolder + createSafeFilename(rc.partNumber) + ".png"
-        viewPort.saveAsImageFile(startImagePath, 200, 200)
+        viewPort.saveAsImageFile(startImagePath, 300, 200)
         
         if len(bomList) > 0:
             occDialog.show('Step 3 of 3: Generating BOM...', '%p percent complete, component %v of %m', 0, len(bomList), 1)
 
             mdText = "# " + rc.partNumber + " BOM\n"
             mdText += "![](images/" + createSafeFilename(rc.partNumber) + ".png)\n"
-            mdText += "|Image|Name|Number|Description|Quantity|\n|-|-|-|-|-|"
+            mdText += "|Image|Part|Description|Quantity|"
+            mdText += "\n|-|-|-|-|"
         
-            bomList.sort(key=lambda x: (x['partName'].casefold(), x))
+            bomList.sort(key=lambda x: (x['partName'].casefold(), x.get('partNumber', '')))
             for bomItem in bomList:
-                mdText = mdText + "\n|![](" + bomItem['imagePath'] + ")|" + bomItem['partName'] +  "|" + bomItem['partNumber'] +  "|" + bomItem['description'] + "|" + str(bomItem['instances']) + "|"
+                part = bomItem['partNumber'] or bomItem['partName']
+
+                parts = [bomItem.get('dimensions', ''), bomItem.get('description', '')]
+                description = "<br>".join(filter(None, parts))
+
+                mdText = mdText + "\n|![](" + bomItem['imagePath'] + ")|" + part +  "|" + description + "|" + str(bomItem['instances']) + "|"
                 occDialog.progressValue = occDialog.progressValue + 1
                 if occDialog.wasCancelled:
                     userCancelled = True
