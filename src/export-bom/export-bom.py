@@ -19,7 +19,7 @@ import adsk.core, adsk.fusion, traceback, re, fractions
 
 def createSafeFilename(inputString):
     # Define the characters to be replaced with a dash
-    invalidChars = r'[\\/:*?"<>|\s]'
+    invalidChars = r'[\\/:*?"<>|\s#]'
     # Replace invalid characters with a dash
     safeString = re.sub(invalidChars, '-', inputString).lower()
     # Replace multiple dashes with a single dash
@@ -30,14 +30,22 @@ def createSafeFilename(inputString):
 def decimal_to_fraction(value):
     if value < 0.01:
         return "0"
-    whole = int(value)
-    frac = fractions.Fraction(value - whole).limit_denominator(32)
+    
+    rounded_value = round(value, 2)  # Round to 2 decimal places to handle 1/100th of an inch
+    whole = int(round(rounded_value))  # Check if rounding makes it a whole number
+    
+    if abs(rounded_value - whole) < 0.01:  # If within 1/100th of an inch, return as whole number
+        return f"{whole}\""
+    
+    whole = int(rounded_value)
+    frac = fractions.Fraction(rounded_value - whole).limit_denominator(32)
+    
     if whole == 0:
-        return f"{frac.numerator}/{frac.denominator}"
+        return f"{frac.numerator}/{frac.denominator}\""
     elif frac.numerator == 0:
-        return f"{whole}"
+        return f"{whole}\""
     else:
-        return f"{whole} {frac.numerator}/{frac.denominator}"
+        return f"{whole}-{frac.numerator}/{frac.denominator}\""
     
 def toggleChildren(occ, newValue, recursive):
     occ.isLightBulbOn = newValue
@@ -94,7 +102,7 @@ def processOcc(occ, dialog, bom, viewPort, imagesFolder, unitMgr):
                     width = unitMgr.convert(width, "cm", unitMgr.defaultLengthUnits)
                     depth = unitMgr.convert(depth, "cm", unitMgr.defaultLengthUnits)
 
-                    dimensions = f"{decimal_to_fraction(length)}\" x {decimal_to_fraction(width)}\" x {decimal_to_fraction(depth)}\""
+                    dimensions = f"{decimal_to_fraction(length)} x {decimal_to_fraction(width)} x {decimal_to_fraction(depth)}"
 
                 viewPort.fit()
                 imageFileName = f"{createSafeFilename(partNumber)}.png"
