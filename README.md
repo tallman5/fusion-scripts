@@ -2,6 +2,9 @@
 
 This repository provides a collection of utilities and add-in scripts designed to enhance Autodesk Fusion's functionality. These scripts, all written in Python, help automate tasks, improve workflow efficiency, and facilitate advanced customization within the Fusion environment.
 
+> [!NOTE]
+> This project includes affiliate links. If you click on these links, I may earn a commission or credit. This does not cost you anything extra, but it helps support the project and future development efforts. Thank you for your support!
+
 ## BOM Scripts
 
 The following scripts are designed to create a more accurate bill of materials (BOM).
@@ -89,6 +92,10 @@ Below are three sample Bill of Materials (BOMs) generated using the `export-bom`
 
 Each sample BOM includes images and part details to illustrate the output format and help users understand how the script structures data.
 
-## Affiliate Links
+# License
+Blast Gates © 2025 by Joseph McGurkin is licensed under [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/?ref=chooser-v1)
 
-This project includes affiliate links. If you click on these links, I may earn a commission or credit. This does not cost you anything extra, but it helps support the project and future development efforts. Thank you for your support!
+<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt="">
+<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt="">
+<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt="">
+<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/sa.svg?ref=chooser-v1" alt="">
